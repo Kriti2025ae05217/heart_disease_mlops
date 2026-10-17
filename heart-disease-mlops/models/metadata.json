@@ -1,0 +1,84 @@
+{
+  "selected_model": "logistic_regression",
+  "features": [
+    "age",
+    "trestbps",
+    "chol",
+    "thalach",
+    "oldpeak",
+    "sex",
+    "cp",
+    "fbs",
+    "restecg",
+    "exang",
+    "slope",
+    "ca",
+    "thal"
+  ],
+  "metrics": {
+    "best_params": {
+      "model__C": 0.1
+    },
+    "cv_accuracy": 0.8305272108843538,
+    "cv_precision": 0.8593791864571916,
+    "cv_recall": 0.7652173913043478,
+    "cv_f1": 0.8053542271327381,
+    "cv_roc_auc": 0.8981081720212154,
+    "cv_accuracy_std": 0.01603652221925638,
+    "cv_precision_std": 0.06675521948356229,
+    "cv_recall_std": 0.05470275765368602,
+    "cv_f1_std": 0.015200677289749671,
+    "cv_roc_auc_std": 0.011892721667452668,
+    "test_accuracy": 0.8852459016393442,
+    "test_precision": 0.8387096774193549,
+    "test_recall": 0.9285714285714286,
+    "test_f1": 0.8813559322033898,
+    "test_roc_auc": 0.9653679653679654
+  },
+  "all_results": {
+    "logistic_regression": {
+      "best_params": {
+        "model__C": 0.1
+      },
+      "cv_accuracy": 0.8305272108843538,
+      "cv_precision": 0.8593791864571916,
+      "cv_recall": 0.7652173913043478,
+      "cv_f1": 0.8053542271327381,
+      "cv_roc_auc": 0.8981081720212154,
+      "cv_accuracy_std": 0.01603652221925638,
+      "cv_precision_std": 0.06675521948356229,
+      "cv_recall_std": 0.05470275765368602,
+      "cv_f1_std": 0.015200677289749671,
+      "cv_roc_auc_std": 0.011892721667452668,
+      "test_accuracy": 0.8852459016393442,
+      "test_precision": 0.8387096774193549,
+      "test_recall": 0.9285714285714286,
+      "test_f1": 0.8813559322033898,
+      "test_roc_auc": 0.9653679653679654
+    },
+    "random_forest": {
+      "best_params": {
+        "model__max_depth": 3,
+        "model__min_samples_leaf": 3,
+        "model__n_estimators": 100
+      },
+      "cv_accuracy": 0.8178571428571428,
+      "cv_precision": 0.8303221288515406,
+      "cv_recall": 0.7644268774703556,
+      "cv_f1": 0.7917746603803872,
+      "cv_roc_auc": 0.8968517392430437,
+      "cv_accuracy_std": 0.04323091116687671,
+      "cv_precision_std": 0.060898445819111295,
+      "cv_recall_std": 0.089448657623281,
+      "cv_f1_std": 0.05241566866614208,
+      "cv_roc_auc_std": 0.027702545098050386,
+      "test_accuracy": 0.8360655737704918,
+      "test_precision": 0.8,
+      "test_recall": 0.8571428571428571,
+      "test_f1": 0.8275862068965517,
+      "test_roc_auc": 0.9469696969696969
+    }
+  },
+  "sklearn_version": "1.8.0",
+  "seed": 42
+}

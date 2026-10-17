@@ -1,0 +1,87 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  lint-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - name: Install dependencies
+        run: pip install -r requirements-dev.txt
+      - name: Lint (flake8)
+        run: flake8 src api tests scripts
+      - name: Unit tests
+        run: pytest -v --cov=src --cov=api --cov-report=xml --junitxml=test-results.xml
+      - name: Upload test reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-reports
+          path: |
+            test-results.xml
+            coverage.xml
+
+  train:
+    needs: lint-test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      - name: Download and clean data
+        run: python scripts/download_data.py
+      - name: Generate EDA figures
+        run: python -m src.heart.eda
+      - name: Train models (MLflow tracking)
+        run: python -m src.heart.train
+      - name: Upload model, metrics, plots and MLflow runs
+        uses: actions/upload-artifact@v4
+        with:
+          name: training-outputs
+          path: |
+            models/
+            reports/
+            mlruns/
+            data/processed/heart_clean.csv
+
+  docker:
+    needs: train
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: training-outputs
+          path: .
+      - name: Build image
+        run: docker build -t heart-api:ci .
+      - name: Smoke test container
+        run: |
+          docker run -d --name api -p 8000:8000 heart-api:ci
+          for i in $(seq 1 20); do curl -sf localhost:8000/health && break || sleep 2; done
+          curl -sf -X POST localhost:8000/predict \
+            -H 'Content-Type: application/json' \
+            -d @scripts/sample_request.json | tee smoke.json
+          curl -sf localhost:8000/metrics | head -5
+      - name: Container logs
+        if: always()
+        run: docker logs api > container.log 2>&1 || true
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: docker-smoke
+          path: |
+            smoke.json
+            container.log

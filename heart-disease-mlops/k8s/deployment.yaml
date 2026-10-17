@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: heart-api
+  labels: {app: heart-api}
+spec:
+  replicas: 2
+  selector:
+    matchLabels: {app: heart-api}
+  template:
+    metadata:
+      labels: {app: heart-api}
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/path: /metrics
+        prometheus.io/port: "8000"
+    spec:
+      containers:
+        - name: api
+          image: heart-api:latest          # replace with your registry image for cloud clusters
+          imagePullPolicy: IfNotPresent    # use local image on Minikube / Docker Desktop
+          ports:
+            - containerPort: 8000
+          env:
+            - {name: LOG_LEVEL, value: INFO}
+          readinessProbe:
+            httpGet: {path: /health, port: 8000}
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet: {path: /health, port: 8000}
+            initialDelaySeconds: 15
+            periodSeconds: 20
+          resources:
+            requests: {cpu: 100m, memory: 256Mi}
+            limits: {cpu: 500m, memory: 512Mi}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: heart-api
+  labels: {app: heart-api}
+spec:
+  type: LoadBalancer      # on Minikube run `minikube tunnel`; Docker Desktop exposes localhost:80
+  selector: {app: heart-api}
+  ports:
+    - name: http
+      port: 80
+      targetPort: 8000
