@@ -1,7 +1,6 @@
 # Lab runbook (VS Code) - do these in order
 
-Everything is already built and unit-tested. In the lab we only **run it, capture proof, and record the video**.
-All commands run in the **VS Code integrated terminal** (`` Ctrl+` ``; new terminal = `+`; split = `Ctrl+Shift+5`).
+
 
 ## 0. VS Code setup (5 min)
 **Machine needs:** Python 3.11+, Git, Docker Desktop (running), kubectl + Minikube (or Docker Desktop Kubernetes enabled).
