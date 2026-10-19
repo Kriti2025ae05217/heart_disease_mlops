@@ -1,6 +1,6 @@
 # Lab runbook (VS Code) - do these in order
 
-Everything is already built and unit-tested. In the lab you only **run it, capture proof, and record the video**.
+Everything is already built and unit-tested. In the lab we only **run it, capture proof, and record the video**.
 All commands run in the **VS Code integrated terminal** (`` Ctrl+` ``; new terminal = `+`; split = `Ctrl+Shift+5`).
 
 ## 0. VS Code setup (5 min)
